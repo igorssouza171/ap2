@@ -1,0 +1,37 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.13
+    hooks:
+      # Run the linter.
+      - id: ruff
+        args: [ --fix ]
+        exclude: (^\.github/|/templates/)
+      # Run the formatter.
+      - id: ruff-format
+        exclude: (^\.github/|/templates/)
+
+  - repo: https://github.com/aio-libs/sort-all
+    rev: v1.3.0
+    hooks:
+      - id: sort-all
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+        exclude: /templates/
+      - id: trailing-whitespace
+        exclude: /templates/
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.43.4
+    hooks:
+      - id: typos
+        args: [ --config, sdk/python/_typos.toml ]
+        # Generated *.pbxproj files contain random hex UUIDs that typos
+        # misreads as misspelled words; flet-mcp's icons.json vendors
+        # Google's icon search tags, which deliberately include common
+        # misspellings for typo-tolerant search; and the generated icon
+        # name lists carry Flutter's own spelling, including a handful of
+        # upstream misspellings we cannot correct without breaking the API.
+        exclude: (/templates/|\.pbxproj$|flet_mcp/data/icons\.json$|icon-codepoints\.json$|controls/material/icons\.json$|controls/cupertino/cupertino_icons\.json$)
